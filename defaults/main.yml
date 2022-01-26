@@ -1,0 +1,68 @@
+---
+# MySQL general settings
+mysqld_task_prefix: "=== MYSQL SERVER ==="
+mysqld_kind: "percona"
+
+# MySQL users and groups
+mysqld_user:  "mysql"
+mysqld_group: "mysql"
+mysqld_home: "/var/lib/mysql"
+mysqld_shell: "/usr/sbin/nologin"
+
+# MySQL templates
+mysqld_template_password_file: "set-passwd.sql.j2"
+mysqld_template_systemd: "mysqld.service.j2"
+mysqld_template_config: "mysqld.cnf.j2"
+
+# MySQL credentials
+mysqld_default_username: "root"
+mysqld_default_password: ""
+mysqld_file_password_file: "/root/set-passwd.sql"
+mysqld_file_password_flag: "/root/set-passwd.sql.created"
+
+# MySQL base directories
+mysqld_dir_etc: "/etc/mysql"
+mysqld_dir_opt: "/opt/mysql"
+mysqld_dir_run: "/var/run/mysqld"
+mysqld_dir_srv: "/srv/mysql"
+# MySQL app directories
+mysqld_dir_distr: "{{ mysqld_dir_opt }}/distr"
+mysqld_dir_server: "{{ mysqld_dir_opt }}/server"
+# MySQL data directories
+mysqld_dir_log: "{{ mysqld_dir_srv }}/logs"
+mysqld_dir_relay: "{{ mysqld_dir_srv }}/relay"
+mysqld_dir_binlog: "{{ mysqld_dir_srv }}/binlog"
+mysqld_dir_data: "{{ mysqld_dir_srv }}/data"
+
+# SystemD settings
+mysqld_systemd_prefix: "msql"
+mysqld_systemd_disable:
+    - mysql
+mysqld_systemd_instance: "default"
+
+# MySQL configuration settings
+mysqld_conf_file: "{{ mysqld_dir_conf }}/{{ mysqld_instance }}.cnf"
+#   MySQL Network settings
+mysqld_conf_bind_address: "127.0.0.1"
+mysqld_conf_port: "3306"
+mysqld_max_allowed_packet: "16M"
+mysqld_max_connections: "1000"
+mysqld_max_connect_errors: "1000000"
+#   Server ID
+mysqld_conf_server_id: "1"
+#   SQL Mode
+mysqld_conf_sql_mode: "NO_ENGINE_SUBSTITUTION"
+#   Character set
+mysqld_conf_default_character_set: "utf8mb4"
+mysqld_conf_character_set_server: "utf8mb4"
+mysqld_conf_collation_server: "utf8mb4_unicode_ci"
+#   Global transactions
+mysqld_conf_gtid_mode: "ON"
+mysqld_conf_enforce_gtid_consistency: "ON"
+#   InnoDB settings
+mysqld_conf_innodb_buffer_pool_size: "1G"
+mysqld_conf_innodb_thread_concurrency: "8"
+mysqld_conf_innodb_log_file_size: "128M"
+#    Binary log settings
+mysqld_expire_logs_days: "7"
+...

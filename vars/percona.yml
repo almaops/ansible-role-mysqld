@@ -1,0 +1,9 @@
+---
+# MySQL distribution settings
+mysqld_percona_version_full: 5.7.35-38
+mysqld_percona_version_major: "{{ mysqld_percona_version_full.split('.')[:2]|join('.') }}"
+mysqld_percona_folder_name: "Percona-Server-{{ mysqld_percona_version_full }}-Linux.x86_64.glibc2.12"
+mysqld_percona_tarball_name: "{{ mysqld_percona_folder_name }}.tar.gz"
+mysqld_percona_download_url: "https://downloads.percona.com/downloads/Percona-Server-{{ mysqld_percona_version_major }}/Percona-Server-{{ mysqld_percona_version_full }}/binary/tarball/{{ mysqld_percona_tarball_name }}"
+
+...

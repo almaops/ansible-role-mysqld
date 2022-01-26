@@ -1,0 +1,9 @@
+---
+- include_vars: "{{ mysqld_kind }}.yml"
+
+- import_tasks: z01-users.yml
+- import_tasks: z02-directories.yml
+- import_tasks: z03-dependencies.yml
+- import_tasks: z04-install-server.yml
+- import_tasks: z05-init-server.yml
+...

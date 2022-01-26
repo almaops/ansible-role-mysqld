@@ -1,0 +1,17 @@
+---
+galaxy_info:
+  author: Valentin Gostev
+  role_name: mysqld
+  description: Role for deploying MySQL server
+  min_ansible_version: 2.9
+  platforms:
+    - name: Ubuntu
+      versions:
+        - bionic
+        - focal
+  galaxy_tags:
+    - mysql
+    - database
+    - percona
+dependencies: []
+...

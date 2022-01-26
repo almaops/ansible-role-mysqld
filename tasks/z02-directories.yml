@@ -1,0 +1,34 @@
+---
+- name: "{{ mysqld_task_prefix }} Create MySQL directories"
+  file:
+    path: "{{ item.name }}"
+    owner: "{{ item.owner }}"
+    group: "{{ item.group }}"
+    state: directory
+  loop:
+    - { name: "{{ mysqld_dir_distr }}", owner: root, group: root }
+    - { name: "{{ mysqld_dir_server }}", owner: root, group: root }
+    - { name: "{{ mysqld_dir_log }}", owner: "{{ mysqld_user }}", group: "{{ mysqld_group }}" }
+    - { name: "{{ mysqld_dir_relay }}", owner: "{{ mysqld_user }}", group: "{{ mysqld_group }}" }
+    - { name: "{{ mysqld_dir_binlog }}", owner: "{{ mysqld_user }}", group: "{{ mysqld_group }}" }
+    - { name: "{{ mysqld_dir_data }}", owner: "{{ mysqld_user }}", group: "{{ mysqld_group }}" }
+    - { name: "{{ mysqld_dir_run }}", owner: "{{ mysqld_user }}", group: "{{ mysqld_group }}" }
+
+- name: "{{ mysqld_task_prefix }} Make Run directory created for MySQL"
+  copy:
+    dest: /etc/tmpfiles.d/mysqld.conf
+    content: 'd {{ mysqld_dir_run }} 0755 {{ mysqld_user }} {{ mysqld_group }} - -'
+
+- name: "{{ mysqld_task_prefix }} Create instance specific directories"
+  file:
+    dest: "{{ item }}/{{ mysqld_instance }}"
+    state: directory
+    mode: 0755
+    owner: "{{ mysqld_user }}"
+    group: "{{ mysqld_group }}"
+  loop:
+    - "{{ mysqld_dir_log }}"
+    - "{{ mysqld_dir_relay }}"
+    - "{{ mysqld_dir_binlog }}"
+    - "{{ mysqld_dir_data }}"
+...

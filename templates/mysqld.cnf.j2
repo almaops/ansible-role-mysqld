@@ -1,0 +1,71 @@
+[client]
+user={{ mysqld_default_username }}
+password='{{ mysqld_default_password }}'
+socket={{ mysqld_dir_run }}/mysqld_{{ mysqld_instance }}.sock
+port={{ mysqld_conf_port }}
+default-character-set={{ mysqld_conf_default_character_set }}
+
+[mysqld]
+#skip-slave-start
+#skip-grant-tables
+skip_name_resolve=ON
+
+# Network settings
+bind-address={{ mysqld_conf_bind_address }}
+port={{ mysqld_conf_port }}
+max_allowed_packet={{ mysqld_max_allowed_packet }}
+max_connections={{ mysqld_max_connections }}
+max_connect_errors={{ mysqld_max_connect_errors }}
+
+# Base MySQL settings
+basedir={{ mysqld_dir_server }}/{{ mysqld_instance }}
+datadir={{ mysqld_dir_data }}/{{ mysqld_instance }}
+lc-messages-dir={{ mysqld_dir_server }}/{{ mysqld_instance }}/share
+socket={{ mysqld_dir_run }}/mysqld_{{ mysqld_instance }}.sock
+pid-file={{ mysqld_dir_run }}/mysqld_{{ mysqld_instance }}.pid
+log-error={{ mysqld_dir_log }}/{{ mysqld_instance }}/{{ mysqld_instance }}-error.log
+server-id={{ mysqld_conf_server_id }}
+sql_mode={{ mysqld_conf_sql_mode }}
+
+# Character settings
+character-set-server={{ mysqld_conf_character_set_server }}
+collation-server={{ mysqld_conf_collation_server }}
+
+# Binary Log settings
+log_bin={{ mysqld_dir_binlog }}/{{ mysqld_instance }}/{{ mysqld_instance }}-binlog
+log_bin_index={{ mysqld_dir_binlog }}/{{ mysqld_instance }}/{{ mysqld_instance }}-binlog.index
+log_slave_updates=ON
+expire_logs_days={{ mysqld_expire_logs_days }}
+sync_binlog=1
+binlog_format=ROW
+binlog_do_db=erslist
+replicate_do_db=erslist
+
+# Relay log settings
+relay_log={{ mysqld_dir_relay }}/{{ mysqld_instance }}/{{ mysqld_instance }}-relay.log
+relay_log_info_file={{ mysqld_dir_relay }}/{{ mysqld_instance }}/{{ mysqld_instance }}-relay-log.info
+relay_log_index={{ mysqld_dir_relay }}/{{ mysqld_instance }}/{{ mysqld_instance }}-relay-log.index
+
+# Global transaction settings
+gtid_mode={{ mysqld_conf_gtid_mode }}
+enforce_gtid_consistency={{ mysqld_conf_enforce_gtid_consistency }}
+
+# InnoDB settings
+default_storage_engine=InnoDB
+innodb=FORCE
+innodb_flush_method=O_DIRECT
+innodb_log_files_in_group=2
+innodb_log_file_size={{ mysqld_conf_innodb_log_file_size }}
+innodb_flush_log_at_trx_commit=1
+innodb_file_per_table=1
+innodb_buffer_pool_size={{ mysqld_conf_innodb_buffer_pool_size }}
+innodb_thread_concurrency={{ mysqld_conf_innodb_thread_concurrency }}
+
+# Slow query log settings
+log_slow_verbosity=microtime,query_plan,innodb
+long_query_time=5
+log_slow_rate_type=query
+log_slow_rate_limit=200
+slow_query_log=1
+max_slowlog_size=512M
+max_slowlog_files=3

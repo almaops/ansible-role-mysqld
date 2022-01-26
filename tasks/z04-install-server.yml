@@ -1,0 +1,29 @@
+---
+- name: "{{ mysqld_task_prefix }} Download MySQL distribution"
+  get_url:
+    url: "{{ mysqld_percona_download_url }}"
+    dest: "{{ mysqld_dir_distr }}/{{ mysqld_percona_tarball_name }}"
+
+- name: "{{ mysqld_task_prefix }} Unarchive  MySQL distribution"
+  unarchive:
+    src: "{{ mysqld_dir_distr }}/{{ mysqld_percona_tarball_name }}"
+    dest: "{{ mysqld_dir_distr }}"
+    remote_src: yes
+
+- name: "{{ mysqld_task_prefix }} Link MySQL directory"
+  file:
+    dest: "{{ mysqld_dir_server }}/{{ mysqld_instance }}"
+    src: "{{ mysqld_dir_distr }}/{{ mysqld_percona_folder_name }}"
+    state: link
+    owner: root
+    group: root
+    mode: 0755
+
+- name: "{{ mysqld_task_prefix }} Install generic MySQL systemd unit file"
+  template:
+    src: "{{ mysqld_template_systemd }}"
+    dest: "/etc/systemd/system/{{ mysqld_systemd_prefix }}@.service"
+    mode: 0644
+    owner: root
+    group: root
+...

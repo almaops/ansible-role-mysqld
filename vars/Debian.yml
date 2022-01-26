@@ -1,0 +1,8 @@
+---
+mysqld_dependecies:
+  - libaio1
+  - libatomic1
+  - python3-pymysql
+  - libperconaserverclient20
+  - libnuma1
+...

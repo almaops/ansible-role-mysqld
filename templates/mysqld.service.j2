@@ -1,0 +1,16 @@
+[Unit]
+Description=Generic multi-instance systemd unit for MySQL
+After=network.target
+
+[Service]
+Type=forking
+User={{ mysql_user|default('mysql') }}
+Group={{ mysql_group|default('mysql') }}
+LimitNOFILE=infinity
+PIDFile={{ mysqld_dir_run }}/mysqld_%I.pid
+ExecStart={{ mysqld_dir_server }}/%I/bin/mysqld  --defaults-file=/etc/mysql/%I.cnf --daemonize
+Restart=on-failure
+RestartPreventExitStatus=1
+
+[Install]
+WantedBy=multi-user.target

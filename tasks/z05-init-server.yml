@@ -1,0 +1,38 @@
+---
+- name: create mysql config
+  template:
+    src: "{{ mysqld_template_config }}"
+    dest: "{{ mysqld_dir_etc }}/{{ mysqld_instance }}.cnf"
+    owner: root
+    group: "{{ mysqld_group }}"
+    mode: 0640
+
+- name: initialize MySQL data directory
+  shell: |
+    cd {{ mysqld_dir_server }}/{{ mysqld_instance }}
+    ./bin/mysqld --defaults-file={{ mysqld_dir_etc }}/{{ mysqld_instance }}.cnf --user={{ mysqld_user }} --initialize-insecure
+  args:
+    warn: false
+    creates: "{{ mysqld_dir_data }}/{{ mysqld_instance }}/ibdata1"
+
+- name: start MySQL {{ mysqld_instance }} instance
+  service:
+    name: "{{ mysqld_systemd_prefix }}@{{ mysqld_instance }}"
+    state: started
+    enabled: yes
+    masked: no
+
+- name: copy password reset script
+  template:
+    src: "{{ mysqld_template_password_file }}"
+    dest: "{{ mysqld_file_password_file }}"
+
+- name: reset empty root password
+  shell: |
+    cd {{ mysqld_dir_server }}/{{ mysqld_instance }}
+    ./bin/mysql --defaults-file={{ mysqld_dir_etc }}/{{ mysqld_instance }}.cnf --skip-password < {{ mysqld_file_password_file }}
+    mv {{ mysqld_file_password_file }} {{ mysqld_file_password_flag }}
+  args:
+    warn: false
+    creates: "{{ mysqld_file_password_flag }}"
+...

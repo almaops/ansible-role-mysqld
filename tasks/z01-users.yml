@@ -1,0 +1,16 @@
+---
+- name: Create MySQL group
+  group:
+    name: "{{ mysqld_group }}"
+    state: present
+  ignore_errors: yes
+
+- name: Create MySQL user
+  user:
+    name: "{{ mysqld_user }}"
+    state: present
+    shell: "{{ mysqld_shell }}"
+    group: "{{ mysqld_group }}"
+    home: "{{ mysqld_home }}"
+  ignore_errors: yes
+...
